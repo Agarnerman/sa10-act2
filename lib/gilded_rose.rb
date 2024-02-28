@@ -1,65 +1,54 @@
 module GildedRose
+  class Item
+      attr_reader :quality, :days_remaining
+      def initialize(quality, days_remaining)
+        @quality, @days_remaining = quality, days_remaining
+      end
+      def tick
+      end
+    end 
+    class Normal < Item
+      def tick
+        @days_remaining -= 1
+        return if @quality == 0
+        @quality -=1
+        @quality -= 1 if @days_remaining <= 0
+      end 
+    end
+    class Brie < Item
+      def brie_tick
+        @days_remaining -= 1
+        return if @quality >= 50
+        @quality += 1 
+        @quality += 1 if @days_remaining <= 0 && @quality < 50
+      end
+    end
+    class Backstage < Item
+      def tick
+        @days_remaining -= 1
+        return if @quality >= 50
+        return @quality = 0 if @days_remaining < 0
+        @quality += 1
+        @quality += 1 if @days_remaining < 10
+        @quality += if days_remaining < 5
+      end 
+    end
+    class Conjured < Item
+      def tick
+        @days_remaining -= 1
+        return if @quality == 0
+        @quality -=2
+        @quality -=2 if @days_remaining <= 0
+      end
+    end
+    DEFAULT_CLASS = Item
+    SPECIALIZED_CLASSES = {
+      'Normal Item'                               => Normal Item,
+      'Aged Brie'                                 => Brie,
+      'Backstage passes to a TAFKAL80ETC concert' => Backstage
+      'Conjured Mana Cake'                         => Conjured }
 
-  def self.new(name, days_remaining, quality)
-    klass_for(name).new(quality, days_remaining)
-  end
-
-  def self.klass_for(name)
-   case name
-   when 'Normal Item'
-    Normal Item
-   when 'Aged Brie'
-    Brie
-   when 'Sulfuras, Hand of Ragnaros'
-   Sulfuras
-   when 'Backstage passes to a TAFKAL80ETC concert'
-    Backstage
-  end
-end
-class Normal
-  attr_reader :quality, :days_remaining
-  def initialize(quality, days_remaining)
-    @quality, @days_remaining = quality, days_remaining
-  end
-  def tick
-    @days_remaining -= 1
-    return if @quality == 0
-    @quality -=1
-    @quality -= 1 if @days_remaining <= 0
-  end 
-end
-class Brie
-  attr_reader :quality, :days_remaining
-  def initialize(quality, days_remaining)
-    @quality, @days_remaining = quality, days_remaining
-  end
-  def brie_tick
-    @days_remaining -= 1
-    return if @quality >= 50
-    @quality += 1 
-    @quality += 1 if @days_remaining <= 0 && @quality < 50
-  end
-end
-class Sulfuras
-  attr_reader :quality, :days_remaining
-  def initialize(quality, days_remaining)
-    @quality, @days_remaining = quality, days_remaining
-  end
-  def tick
-  end
-end
-class Backstage
-  attr_reader :quality, :days_remaining
-  def initialize(quality, days_remaining)
-    @quality, @days_remaining = quality, days_remaining
-  end
-  def tick
-    @days_remaining -= 1
-    return if @quality >= 50
-    return @quality = 0 if @days_remaining < 0
-    @quality += 1
-    @quality += 1 if @days_remaining < 10
-    @quality += if days_remaining < 5
-  end 
+  def self.new(name, quality, days_remaining)
+      (SPECIALIZED_CLASSES[name]  ||  DEFAULT_CLASS).new(quality, days_remaining)
   end
 end
