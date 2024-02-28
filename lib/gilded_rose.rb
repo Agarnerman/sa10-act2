@@ -1,11 +1,10 @@
-class GildedRose
-  attr_reader :item
+module GildedRose
 
-  def initialize(name:, days_remaining:, quality:)
-    @item = klass_for(name).new(quality, days_remaining)
+  def self.new(name, days_remaining, quality)
+    klass_for(name).new(quality, days_remaining)
   end
 
-  def klass_for(name)
+  def self.klass_for(name)
    case name
    when 'Normal Item'
     Normal Item
@@ -15,17 +14,6 @@ class GildedRose
    Sulfuras
    when 'Backstage passes to a TAFKAL80ETC concert'
     Backstage
-  end
-    def quality
-       item.quality
-    end
-    def days_remaining
-      item.days_remaining 
-
-    end
-    def tick
-      item.tick
-    end
   end
 end
 class Normal
